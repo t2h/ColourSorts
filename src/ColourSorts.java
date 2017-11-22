@@ -1,16 +1,20 @@
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Random;
-import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 
 public class ColourSorts {
+	
+	static JFrame frame = new JFrame();
 
 	public static void main(String[] args) {
 		
 		//Sorted array of integers
+		int size = 255;
 		int[] array = new int[size];
 		for (int i = 0; i < array.length; i++){
 			array[i] = i + 1;
@@ -24,9 +28,6 @@ public class ColourSorts {
 		int height = 200;
 		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		
-		//File object
-		File f = null;
-		
 		//Colour the image in pixel-width columns, according to the shuffled array
 		for (int x = 0; x < width; x++){
 			
@@ -35,17 +36,31 @@ public class ColourSorts {
 			for (int y = 1; y < height; y++){
 				img.setRGB(x, y, Color.HSBtoRGB(array[x]/255f, 1.0f, 0.5f));
 			}
-			
 		}
 		
-		//Write image to file
-		try {
-			f = new File("Output.png");
-			ImageIO.write(img, "png", f);
-		} catch (IOException e){
-			System.out.println("Error: " + e);
-		}
+		//Show image in new window
+		frame.getContentPane().setLayout(new FlowLayout());
+		frame.getContentPane().add(new JLabel(new ImageIcon(img)));
+		frame.pack();
+		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+	}
+	
+	private static void printImage(int[] array){
+		int width = array.length;
+		int height = 200;
+		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		for (int x = 0; x < width; x++){
+			img.setRGB(x, 0, Color.HSBtoRGB(array[x]/255f, 1.0f, 0.5f));
+			for (int y = 1; y < height; y++){
+				img.setRGB(x, y, Color.HSBtoRGB(array[x]/255f, 1.0f, 0.5f));
+			}
+		}
+		frame.getContentPane().removeAll();
+		frame.getContentPane().add(new JLabel(new ImageIcon(img)));
+		frame.pack();
+		frame.setVisible(true);
 	}
 	
 	//Fisher-Yates shuffle function
